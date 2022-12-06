@@ -1,0 +1,85 @@
+<template>
+    <lightning-card title="Shopping Center" icon-name="standard:address"></lightning-card>
+
+    <lightning-input type ="search"
+            onchange={handleSearch}
+            variant="label-hidden"
+            class="slds-var-m-bottom_small slds-m-top_small slds-p-right_medium"
+            placeholder="Search for Product"
+            value={searchWords}>
+    </lightning-input>
+    
+    <template if:true={grid}>
+        <lightning-layout multiple-rows="true" class="layout-container"> 
+            <template for:each={grid} for:item="griddetails">
+                <lightning-layout-item key = {griddetails.Id} size="3" class="slds-var-m-around_x-small slds-var-p-around_x-small">
+                    <!-- details card start here -->
+                    <lightning-card title={griddetails.Name} class="grid_card">
+                        <div class = "slds-var-p-horizontal_small">
+                            <div class="slds-grid slds-wrap">
+                                <div class="slds-col slds-size_size_8-of-12">
+                                    <div style="width: auto;">   
+                                       <template if:true={griddetails.contentdocumentid}>
+                                            <img src={griddetails.contentdocumentid} height="150" width="150">
+                                        </template>       
+                                    </div>
+                                </div>
+                                <div classs = "slds-col slds-size_4-of-12">
+                                    <p class = "slds-var-m-botton_xx-small"><Strong>{griddetails.name}</Strong></p>
+                                    <p class = "slds-var-m-botton_xx-small">Brand : {griddetails.brand}</p>
+                                    <p class = "slds-var-m-botton_xx-small">Price : {griddetails.price}</p> 
+                                    <template if:true={griddetails.isStockAvailable}>
+                                    <p class = "slds-var-m-botton_xx-small">In Stock : {griddetails.stock}</p> 
+                                    <lightning-button variant="brand"
+                                                label="Buy Now"
+                                                title="Adding item in cart" 
+                                                onclick={openModal}
+                                                class="slds-m-left_x-small"
+                                                value = {griddetails.Id}>
+                                       </lightning-button> 
+                                </template>
+                                <template if:false={griddetails.isStockAvailable}>
+                                    <p class = "slds-var-m-botton_xx-small" style="text-decoration:bold;color:red;">Out of Stock</p> 
+                                    <lightning-button label="SORRY" variant="destructive" disabled="true" ></lightning-button>
+                                </template>
+                                    <div class = "slds-var-m-around_x-small">
+                                        <!-- starting of button to add in cart -->
+                                       
+                                      <template if:true={isModalOpen}>
+                                         <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+                                             <div class="slds-modal__container">     
+                                                 <header class="slds-modal__header">  
+                                                     <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" title="Close" onclick={closeModal}>
+                                                         <lightning-icon icon-name="utility:close"
+                                                             alternative-text="close"
+                                                             variant="inverse"
+                                                             size="small" >
+                                                         </lightning-icon>
+                                                         <span class="slds-assistive-text">Close</span>
+                                                     </button>
+                                                     <h2 class="slds-text-heading_medium slds-hyphenate">Adding  Item To Cart</h2>
+                                                 </header>
+                                                 <!-- Modal/Popup Box LWC body starts here -->
+                                                 <div class="slds-modal__content slds-p-around_medium" >
+                                                        <lightning-input type="number" required label="Quantity"  value ={quantity} onchange={addQuantity}> </lightning-input>
+                                                        <p><b> Are you sure to add items in cart? </b></p>    
+                                                 </div>
+                                                 <!-- Modal/Popup Box LWC footer starts here -->
+                                                 <footer class="slds-modal__footer">
+                                                     <button class="slds-button slds-button_neutral" onclick={closeModal} title="Cancel">Cancel</button>
+                                                     <button class="slds-button slds-button_brand" onclick={submitDetails} title="OK">OK</button>   
+                                                 </footer>                                                                                                  
+                                             </div>
+                                         </section>
+                                         <div class="slds-backdrop slds-backdrop_open"></div>
+                                     </template>
+                                    </div>
+                                </div>
+                            </div>   
+                        </div>
+                    </lightning-card>
+                </lightning-layout-item>
+            </template>
+        </lightning-layout>
+    </template>
+</template>

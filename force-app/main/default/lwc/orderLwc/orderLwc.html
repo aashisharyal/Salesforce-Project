@@ -1,0 +1,10 @@
+<template>
+
+    <lightning-card icon-name='custom:custom14' title='Create an Order' class='slds-card small'>
+            <div class="slds-m-bottom_small">
+                <lightning-record-form record-id={recordId} object-api-name="orders__c"
+                fields={fields} columns="2" mode="edit"  onsubmit={handleSubmit} onsuccess={handleSuccess}> </lightning-record-form>
+            </div>
+    </lightning-card>
+    
+</template>
